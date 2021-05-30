@@ -92,7 +92,7 @@ class ManejadorEmpleados:
     def cambiarHorasEmpC(self,dni):
         empleado = self.buscarPorDNI(dni)
         if isinstance(empleado,EmpleadoContratado):
-            header = self.__generaHeader('EMPLEADO')
+            header = self.__generaHeader('EMPLEADO CONTRATADO')
             empleado.showEmpleado()
             print(header)
             horas = input('Ingrese horas trabajadas: ')
@@ -100,8 +100,10 @@ class ManejadorEmpleados:
             print(header)
             empleado.showEmpleado()
             print(header)
+        elif isinstance(empleado,Empleado):
+            print('Error: Se ha ingresado el DNI de un empleado: {}'.format(empleado.getTipo().upper()))
         else:
-            print('El dni ingresado NO corresponde a un empleado contratado.')
+            print('No se encontro el DNI indicado.')
             
     #----------------------------------------------#
     #            Ejercicio 4- Apartado 2           #
