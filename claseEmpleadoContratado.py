@@ -34,3 +34,6 @@ class EmpleadoContratado(Empleado):
     def calcSueldo(self):
         sueldo = self.__cantHoras * self.valorHora
         return sueldo
+
+    def getTipo(self):
+        return 'contratado'

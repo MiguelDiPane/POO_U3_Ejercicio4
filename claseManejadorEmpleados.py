@@ -150,17 +150,12 @@ class ManejadorEmpleados:
             empleado = self.__empleados[i]
             sueldo = empleado.calcSueldo()
             if sueldo < 25000:
-                if isinstance(empleado,EmpleadoPlanta):
-                    condicion = 'PLANTA'
-                elif isinstance(empleado,EmpleadoContratado):
-                    condicion = 'CONTRATADO'
-                else:
-                    condicion = 'EXTERNO'
+                condicion = empleado.getTipo()
                 print('| DNI: {:44}|'.format(empleado.getDNI()))
                 print('| Nombre: {:41}|'.format(empleado.getNom()))
                 print('| Direccion: {:38}|'.format(empleado.getDir()))
                 print('| Sueldo [$]: {:37}|'.format(str(sueldo)))
-                print('| Condicion: {:38}|'.format(condicion))
+                print('| Condicion: {:38}|'.format(condicion.upper()))
                 print(header)
 
     #----------------------------------------------#

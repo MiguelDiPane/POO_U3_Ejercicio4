@@ -44,3 +44,6 @@ class EmpleadoExterno(Empleado):
     def calcSueldo(self):
         sueldo = self.__costoObra - self.__viatico - self.__montoSeguro
         return sueldo
+
+    def getTipo(self):
+        return 'externo'

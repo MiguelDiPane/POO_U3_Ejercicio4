@@ -21,3 +21,6 @@ class EmpleadoPlanta(Empleado):
         sueldo = self.__sueldoBasico * (1 + 0.01*self.__antiguedad)
         sueldo = round(sueldo,2)
         return sueldo
+
+    def getTipo(self):
+        return 'planta'

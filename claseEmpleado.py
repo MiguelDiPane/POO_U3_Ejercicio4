@@ -33,3 +33,8 @@ class Empleado:
     @abc.abstractmethod
     def calcSueldo(self):
         pass
+
+    @abc.abstractmethod
+    def getTipo(self):
+        pass
+    
