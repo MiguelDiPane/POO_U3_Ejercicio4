@@ -20,44 +20,43 @@ def leerArchivo(nomArchivo,manejador):
 
 if __name__ == '__main__':
     #Cantidad de los empleados en archivos: 45
-    try:
-        cant = input('Ingrese cantidad TOTAL de empleados (45): ')
-        empleados = ManejadorEmpleados(int(cant))
-        leerArchivo('planta.csv',empleados)
-        leerArchivo('contratados.csv',empleados)
-        leerArchivo('externos.csv',empleados)
-        
-        miMenu = Menu()
-        miMenu.define_menu('Menu de opciones',['[1]- Registrar horas','[2]- Monto total de tarea','[3]- Lista beneficiarios ayuda','[4]- Calcular sueldos','[0]- Salir'])
+    print('Iniciando sistema.')
+    print('Ingrese cantidad TOTAL de empleados')
+    print('Nota: Si la cantidad es inferior a los empleados cargados en archivos, se leeran todos los empleados')
+    cant = input('--> ')
+    while not cant.isdigit():
+        print('Error: El numero debe ser entero. Reintente')
+        cant = input('--> ')
+
+    empleados = ManejadorEmpleados(int(cant))
+    leerArchivo('planta.csv',empleados)
+    leerArchivo('contratados.csv',empleados)
+    leerArchivo('externos.csv',empleados)
+    
+    miMenu = Menu()
+    miMenu.define_menu('Menu de opciones',['[1]- Registrar horas','[2]- Monto total de tarea','[3]- Lista beneficiarios ayuda','[4]- Calcular sueldos','[0]- Salir'])
+    miMenu.showMenu()
+    op = miMenu.selectOption() 
+    while op != 0:
+        #Registrar horas:
+        if op == 1:
+            dni = input('Ingrese DNI de empleado contratado: ')
+            empleados.cambiarHorasEmpC(dni)
+            input('Presione ENTER para continuar...')
+        #Total de tarea
+        elif op == 2:
+            empleados.totalTarea()
+        #Ayuda
+        elif op == 3:
+            empleados.listBeneficiarios()
+            input('Presione ENTER para continuar...')
+        #Calcular sueldo
+        elif op == 4:
+            empleados.listarEmpleados()
+            input('Presione ENTER para continuar...')
+
         miMenu.showMenu()
         op = miMenu.selectOption() 
-        while op != 0:
-            #Registrar horas:
-            if op == 1:
-                dni = input('Ingrese DNI de empleado contratado: ')
-                empC = empleados.searchEmpleadoC(dni)
-                if empC != None:
-                    empC.showEmpleado()
-                    horas = input('Ingrese horas trabajadas: ')
-                    empC.addHoras(horas)
-                    empC.showEmpleado()
-                input('Presione ENTER para continuar...')
-            #Total de tarea
-            elif op == 2:
-                empleados.totalTarea()
-            #Ayuda
-            elif op == 3:
-                empleados.listBeneficiarios()
-                input('Presione ENTER para continuar...')
-            #Calcular sueldo
-            elif op == 4:
-                empleados.listarEmpleados()
-                input('Presione ENTER para continuar...')
-
-            miMenu.showMenu()
-            op = miMenu.selectOption() 
-    except ValueError:
-        print('La cantidad de empleados debe ser un entero')
 
 
 

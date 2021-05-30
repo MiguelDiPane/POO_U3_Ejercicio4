@@ -20,6 +20,18 @@ class EmpleadoExterno(Empleado):
         self.__costoObra = cObra
         self.__montoSeguro = mSeguro
 
+    #Ficha empleado externo
+    def showEmpleado(self):
+        super().showEmpleado()
+        print('| Condicion: {:38}|'.format('EXTERNO'))
+        print('| Tarea: {:42}|'.format(self.__tarea))
+        print('| Inicio tarea: {:35}|'.format(str(self.__fechaIn)))
+        print('| Fin tarea: {:38}|'.format(str(self.__fechaFin)))
+        print('| Monto viatico [$]: {:30}|'.format(str(self.__viatico)))
+        print('| Costo obra [$]: {:33}|'.format(str(self.__costoObra)))
+        print('| Monto seguro [$]: {:31}|'.format(str(self.__montoSeguro)))
+
+
     def getTarea(self):
         return self.__tarea
     

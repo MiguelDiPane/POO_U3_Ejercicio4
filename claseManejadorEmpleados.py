@@ -11,12 +11,22 @@ class ManejadorEmpleados:
     #Atributos
     __empleados = None
     __actual = 0
+    __dimension = 0
 
     def __init__(self,dimension = 0):
         self.__empleados = np.empty(dimension,dtype=Empleado)
-        
+        self.__dimension = dimension
+
+    #---------------------------------------------------------------------#
+    #         Metodos para crear empleados y agregarlos al arreglo        #
+    #---------------------------------------------------------------------#
+    #        
     def addEmpleado(self,empleado):
         if isinstance(empleado,Empleado):
+            #Redimensiono si se ha llegado a la dimension dada por el usuario y quedan empleados
+            if self.__actual == self.__dimension:
+                self.__empleados.resize(len(self.__empleados) + 1)
+                self.__dimension += 1
             self.__empleados[self.__actual] = empleado
             self.__actual += 1
         else:
@@ -74,23 +84,28 @@ class ManejadorEmpleados:
         except ValueError:
             print('Error: No se pudo cargar el empleado externo')
 
-    #Busca solo empleados contratados para incrementar sus horas trabajadas
-    def searchEmpleadoC(self,dni):
-        resultado = None
-        if dni.isdigit():
-            i = 0
-            esta = False
-            while i < len(self.__empleados) and not esta:
-                if isinstance(self.__empleados[i],EmpleadoContratado) and dni == self.__empleados[i].getDNI():
-                    esta = True
-                    resultado = self.__empleados[i]
-                else:
-                    i += 1
-            if not esta:
-                print('El dni ingresado NO corresponde a un empleado contratado.')
-        else: 
-            print('Error: Dni incorrecto')
-        return resultado
+    #----------------------------------------------#
+    #            Ejercicio 4- Apartado 1           #
+    #----------------------------------------------#
+
+    #Busca empleado y si es contratado incrementa sus horas trabajadas
+    def cambiarHorasEmpC(self,dni):
+        empleado = self.buscarPorDNI(dni)
+        if isinstance(empleado,EmpleadoContratado):
+            header = self.__generaHeader('EMPLEADO')
+            empleado.showEmpleado()
+            print(header)
+            horas = input('Ingrese horas trabajadas: ')
+            empleado.addHoras(horas)
+            print(header)
+            empleado.showEmpleado()
+            print(header)
+        else:
+            print('El dni ingresado NO corresponde a un empleado contratado.')
+            
+    #----------------------------------------------#
+    #            Ejercicio 4- Apartado 2           #
+    #----------------------------------------------#
 
     #Calcula el monto total de una tarea no finalizada
     def totalTarea(self):
@@ -108,16 +123,14 @@ class ManejadorEmpleados:
             miTarea = EmpleadoExterno.tareas[op-1]
             monto = 0.0
             fechaHoy = date.today()
-            for empleado in self.__empleados:
+            for i in range(self.__actual):
+                empleado = self.__empleados[i]
                 if isinstance(empleado,EmpleadoExterno):
                     tarea = empleado.getTarea()            
                     if miTarea == tarea and fechaHoy < empleado.getFechaFin():
                         monto += empleado.getMontoObra()
             #Imprimo resultados:
-            header = '+' + '-' * 50 + '+' 
-            print(header)
-            print('|{0:^50}|'.format(miTarea.upper()))
-            print(header)
+            header = self.__generaHeader(miTarea.upper())
             print('| Monto total [$]: {:32}|'.format(str(monto)))
             print(header)
             print('Nota: Solo se consideran las tareas que no han finalizado.\n')
@@ -126,13 +139,15 @@ class ManejadorEmpleados:
             menu.showMenu()
             op = menu.selectOption()
 
+    #----------------------------------------------#
+    #            Ejercicio 4- Apartado 3           #
+    #----------------------------------------------#
+
     #Muestro empleados que recibiran ayuda solidaria
     def listBeneficiarios(self):
-        header = '+' + '-' * 50 + '+'
-        print(header)
-        print('|{:^50}|'.format('BENEFICIARIOS AYUDA SOLIDARIA'))
-        print(header)  
-        for empleado in self.__empleados:
+        header = self.__generaHeader('BENEFICIARIOS AYUDA SOLIDARIA')  
+        for i in range(self.__actual):
+            empleado = self.__empleados[i]
             sueldo = empleado.calcSueldo()
             if sueldo < 25000:
                 if isinstance(empleado,EmpleadoPlanta):
@@ -144,19 +159,50 @@ class ManejadorEmpleados:
                 print('| DNI: {:44}|'.format(empleado.getDNI()))
                 print('| Nombre: {:41}|'.format(empleado.getNom()))
                 print('| Direccion: {:38}|'.format(empleado.getDir()))
-                print('| Sueldo: {:41}|'.format(str(sueldo)))
+                print('| Sueldo [$]: {:37}|'.format(str(sueldo)))
                 print('| Condicion: {:38}|'.format(condicion))
                 print(header)
 
+    #----------------------------------------------#
+    #            Ejercicio 4- Apartado 4           #
+    #----------------------------------------------#
+
     #Listar todos los empleados con su sueldo
     def listarEmpleados(self):
-        header = '+' + '-' * 50 + '+'
-        print(header)
-        print('|{:^50}|'.format('LISTA DE EMPLEADOS'))
-        print(header) 
-        for empleado in self.__empleados:
+        header = self.__generaHeader('LISTA DE EMPLEADOS')
+        for i in range(self.__actual):
+            empleado = self.__empleados[i]
             sueldo = empleado.calcSueldo()
-            print('| Nombre: {:41}|'.format(empleado.getNom()))
-            print('| Telefono: {:39}|'.format(empleado.getTel()))
-            print('| Sueldo: {:41}|'.format(str(sueldo)))
+            print('| Nombre: {0:33}| {1:6}|'.format(empleado.getNom(),'N° '+str(i+1)))
+            print('| Telefono: {0:31}+-------|'.format(empleado.getTel()))
+            print('| Sueldo [$]: {0:37}|'.format(str(sueldo)))
             print(header)
+
+    #----------------------------------------------#
+    #              Metodos auxiliares              #
+    #----------------------------------------------#
+
+    #Devuelve el empleado segun el dni pasado por parametro
+    def buscarPorDNI(self,dni):
+        empleado = None
+        if dni.isdigit():
+            esta = False
+            i = 0
+            while i < self.__actual and not esta:
+                if self.__empleados[i].getDNI() == dni:
+                    esta = True
+                else:
+                    i+=1
+            if esta:
+                empleado = self.__empleados[i]
+        else:
+            print('DNI incorrecto.')
+        return empleado
+
+    #Genero un encabezado para los distintos apartados
+    def __generaHeader(self,titulo):
+        header = '+' + '-'*50 + '+'
+        print(header)
+        print('|{0:^50}|'.format(titulo))
+        print(header)
+        return header 

@@ -16,22 +16,13 @@ class EmpleadoContratado(Empleado):
     
     #Ficha empleado contratado
     def showEmpleado(self):
-        header = '+' + '-' * 50 + '+'
-        print(header)
-        print('|{:^50}|'.format('EMPLEADO'))
-        print(header)
-        print('| DNI: {:44}|'.format(self._dni))
-        print('| Nombre: {:41}|'.format(self._nombre))
-        print('| Direccion: {:38}|'.format(self._direccion))
-        print('| Telefono: {:39}|'.format(self._telefono))
-        print(header)
+        super().showEmpleado()
         print('| Condicion: {:38}|'.format('CONTRATADO'))
         print('| Valor hora: {:37}|'.format(str(self.valorHora)))
         print('| Inicio contrato: {:32}|'.format(str(self.__fechaIn)))
         print('| Fin contrato: {:35}|'.format(str(self.__fechaFin)))
         print('| Horas trabajadas: {:31}|'.format(str(self.__cantHoras)))
-        print(header)
-    
+
     def addHoras(self,horas):
         try:
             horas = int(horas)

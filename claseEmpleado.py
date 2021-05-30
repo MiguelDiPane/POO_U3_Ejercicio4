@@ -22,7 +22,14 @@ class Empleado:
         return self._nombre
     def getTel(self):
         return self._telefono
-       
+
+    #Ficha empleado
+    def showEmpleado(self):
+        print('| DNI: {:44}|'.format(self._dni))
+        print('| Nombre: {:41}|'.format(self._nombre))
+        print('| Direccion: {:38}|'.format(self._direccion))
+        print('| Telefono: {:39}|'.format(self._telefono))
+
     @abc.abstractmethod
     def calcSueldo(self):
         pass
