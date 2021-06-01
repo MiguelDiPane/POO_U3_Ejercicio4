@@ -1,7 +1,7 @@
 import abc
 from abc import ABC
 
-class Empleado:
+class Empleado(ABC):
     #Atributos
     _dni = ''
     _nombre = ''
